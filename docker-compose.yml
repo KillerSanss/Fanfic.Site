@@ -1,0 +1,18 @@
+﻿services:
+  infrastructure:
+    image: infrastructure
+    build:
+      context: .
+      dockerfile: Infrastructure/Dockerfile
+
+  infrastructure-1:
+    image: infrastructure-1
+    build:
+      context: .
+      dockerfile: Infrastructure/Dockerfile
+
+  infrastructure-2:
+    image: infrastructure-2
+    build:
+      context: .
+      dockerfile: Infrastructure/Dockerfile

@@ -45,5 +45,9 @@ public class UserValidator : AbstractValidator<User>
             .NotNull().WithMessage(ValidationMessages.NullError)
             .NotEmpty().WithMessage(ValidationMessages.EmptyError)
             .IsInEnum().WithMessage(ValidationMessages.EnumError);
+
+        RuleFor(d => d.AvatarUrl)
+            .NotNull().WithMessage(ValidationMessages.NullError)
+            .NotEmpty().WithMessage(ValidationMessages.EmptyError);
     }
 }

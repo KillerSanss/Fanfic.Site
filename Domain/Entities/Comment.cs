@@ -32,6 +32,16 @@ public class Comment : BaseEntity
     /// Навигационное свойство Chapter
     /// </summary>
     public Chapter Chapter { get; set; }
+    
+    /// <summary>
+    /// Идентификатор родительского комментарий
+    /// </summary>
+    public Guid? ParentCommentId { get; set; }
+    
+    /// <summary>
+    /// Навигационное свойство Comment
+    /// </summary>
+    public Comment ParentComment { get; set; }
 
     /// <summary>
     /// Комментарий

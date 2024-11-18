@@ -45,5 +45,9 @@ public class WorkValidator : AbstractValidator<Work>
             .NotNull().WithMessage(ValidationMessages.NullError)
             .NotEmpty().WithMessage(ValidationMessages.EmptyError)
             .GreaterThanOrEqualTo(0).WithMessage(ValidationMessages.NegativeNumberError);
+
+        RuleFor(d => d.CoverUrl)
+            .NotNull().WithMessage(ValidationMessages.NullError)
+            .NotEmpty().WithMessage(ValidationMessages.EmptyError);
     }
 }

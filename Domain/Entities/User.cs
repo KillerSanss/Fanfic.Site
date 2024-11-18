@@ -50,9 +50,44 @@ public class User : BaseEntity
     public string? TelegramId { get; set; }
     
     /// <summary>
+    /// Аватар
+    /// </summary>
+    public string AvatarUrl { get; set; }
+    
+    /// <summary>
+    /// Отправлять сообщения на почту
+    /// </summary>
+    public bool IsEmail { get; set; }
+    
+    /// <summary>
+    /// Показывать почту
+    /// </summary>
+    public bool IsShowEmail { get; set; }
+    
+    /// <summary>
+    /// Отправлять сообщения в телеграм
+    /// </summary>
+    public bool IsTelegram { get; set; }
+    
+    /// <summary>
+    /// Показывать телеграм
+    /// </summary>
+    public bool IsShowTelegram { get; set; }
+    
+    /// <summary>
     /// Список работ
     /// </summary>
     public ICollection<Work> Works = new List<Work>();
+    
+    /// <summary>
+    /// Список лайков
+    /// </summary>
+    public ICollection<WorkLike> WorkLikes = new List<WorkLike>();
+    
+    /// <summary>
+    /// Список любимых тэгов
+    /// </summary>
+    public ICollection<UserTag> UserTags = new List<UserTag>();
     
     /// <summary>
     /// Список комментариев
@@ -68,13 +103,15 @@ public class User : BaseEntity
     /// <param name="gender">Гендер.</param>
     /// <param name="email">Электронная почта.</param>
     /// <param name="password">Пароль.</param>
+    /// <param name="avatarUrl">Аватар.</param>
     public User(
         Guid id,
         string nickName,
         DateTime birthDate,
         Gender gender,
         string email,
-        string password)
+        string password,
+        string avatarUrl)
     {
         SetId(id);
         NickName = nickName;
@@ -83,6 +120,11 @@ public class User : BaseEntity
         Gender = gender;
         Email = email;
         Password = password;
+        AvatarUrl = avatarUrl;
+        IsEmail = true;
+        IsShowEmail = false;
+        IsTelegram = false;
+        IsShowTelegram = false;
 
         Validate();
     }
@@ -95,19 +137,22 @@ public class User : BaseEntity
     /// <param name="gender">Гендер.</param>
     /// <param name="email">Электронная почта.</param>
     /// <param name="password">Пароль</param>
+    /// <param name="avatarUrl"></param>
     /// <returns>Обновленный пользователь.</returns>
     public User Update(
         string nickName,
         DateTime birthDate,
         Gender gender,
         string email,
-        string password)
+        string password,
+        string avatarUrl)
     {
         NickName = nickName;
         BirthDate = birthDate;
         Gender = gender;
         Email = email;
         Password = password;
+        AvatarUrl = avatarUrl;
         
         Validate();
         
@@ -133,6 +178,30 @@ public class User : BaseEntity
     public void UnlinkTelegram()
     {
         TelegramId = null;
+    }
+    
+    /// <summary>
+    /// Изменение настроек
+    /// </summary>
+    /// <param name="isEmail">Отправка сообщений на почту.</param>
+    /// <param name="isShowEmail">Отображение электронной почты в профиле.</param>
+    /// <param name="isTelegram">Отправка сообщений в телеграм.</param>
+    /// <param name="isShowTelegram">Отображение телеграмма в профиле.</param>
+    /// <returns>Пользователь с обновленными настройками.</returns>
+    public User ChangeSettings(
+        bool isEmail,
+        bool isShowEmail,
+        bool isTelegram,
+        bool isShowTelegram)
+    {
+        IsEmail = isEmail;
+        IsShowEmail = isShowEmail;
+        IsTelegram = isTelegram;
+        IsShowTelegram = isShowTelegram;
+        
+        Validate();
+
+        return this;
     }
     
     private void Validate()

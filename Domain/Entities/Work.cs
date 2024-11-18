@@ -17,7 +17,7 @@ public class Work : BaseEntity
     /// <summary>
     /// Навигационное свойство User
     /// </summary>
-    public Guid User { get; set; }
+    public User User { get; set; }
     
     /// <summary>
     /// Название
@@ -50,15 +50,25 @@ public class Work : BaseEntity
     public int Views { get; set; }
     
     /// <summary>
+    /// Обложка
+    /// </summary>
+    public string CoverUrl { get; set; }
+    
+    /// <summary>
     /// Комментарии
     /// </summary>
     public ICollection<Chapter> Chapters = new List<Chapter>();
     
     /// <summary>
+    /// Список лайков
+    /// </summary>
+    public ICollection<WorkLike> WorkLikes = new List<WorkLike>();
+    
+    /// <summary>
     /// Тэги
     /// </summary>
     public ICollection<WorkTag> WorkTags = new List<WorkTag>();
-    
+
     /// <summary>
     /// Конструктор
     /// </summary>
@@ -67,12 +77,14 @@ public class Work : BaseEntity
     /// <param name="title">Название.</param>
     /// <param name="description">Описание.</param>
     /// <param name="category">Категория.</param>
+    /// <param name="coverUrl">Обложка.</param>
     public Work(
         Guid id,
         Guid userId,
         string title,
         string description,
-        Category category)
+        Category category,
+        string coverUrl)
     {
         SetId(id);
         UserId = userId;
@@ -80,25 +92,29 @@ public class Work : BaseEntity
         Description = description;
         PublicationDate = DateTime.Now;
         Category = category;
+        CoverUrl = coverUrl;
         
         Validate();
     }
-    
+
     /// <summary>
     /// Обновление
     /// </summary>
     /// <param name="title">Название.</param>
     /// <param name="description">Описание.</param>
     /// <param name="category">Категория.</param>
+    /// <param name="coverUrl">Обложка.</param>
     /// <returns>Обновленная работа.</returns>
     public Work Update(
         string title,
         string description,
-        Category category)
+        Category category,
+        string coverUrl)
     {
         Title = title;
         Description = description;
         Category = category;
+        CoverUrl = coverUrl;
         
         WorkTags.Clear();
 

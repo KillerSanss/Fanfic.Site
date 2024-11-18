@@ -28,6 +28,11 @@ public class Tag : BaseEntity
     /// Привязка к работам
     /// </summary>
     public ICollection<WorkTag> WorkTags { get; set; } = new List<WorkTag>();
+    
+    /// <summary>
+    /// Список любимых тэгов
+    /// </summary>
+    public ICollection<UserTag> UserTags = new List<UserTag>();
 
     /// <summary>
     /// Конструктор
