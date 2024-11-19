@@ -11,7 +11,11 @@ namespace Infrastructure.Dal.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly FanficSiteDbContext _dbContext;
-
+    
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст базы данных.</param>
     public UserRepository(FanficSiteDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -46,7 +50,7 @@ public class UserRepository : IUserRepository
 
         return true;
     }
-    
+
     /// <summary>
     /// Добавление User
     /// </summary>
@@ -90,22 +94,7 @@ public class UserRepository : IUserRepository
     /// <returns>User.</returns>
     public async Task<User> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users
-            .Include(u => u.Works)
-            .Include(u => u.WorkLikes)
-            .Include(u => u.UserTags)
-            .Include(u => u.Comments)
-            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-    }
-
-    public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return await _dbContext.Users
-            .Include(u => u.Works)
-            .Include(u => u.WorkLikes)
-            .Include(u => u.UserTags)
-            .Include(u => u.Comments)
-            .ToListAsync(cancellationToken);
+        return await _dbContext.Users.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
     
     /// <summary>
@@ -113,25 +102,31 @@ public class UserRepository : IUserRepository
     /// </summary>
     /// <param name="telegramId">Идентификатор телеграма.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    /// <returns>User/</returns>
+    /// <returns>User.</returns>
     public async Task<User> GetByTelegramIdAsync(string telegramId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users
-            .Include(u => u.Works)
-            .Include(u => u.WorkLikes)
-            .Include(u => u.UserTags)
-            .Include(u => u.Comments)
-            .FirstOrDefaultAsync(p => p.TelegramId == telegramId, cancellationToken);
+        return await _dbContext.Users.FirstOrDefaultAsync(p => p.TelegramId == telegramId, cancellationToken);
     }
 
+    /// <summary>
+    /// Получение User по никнейму
+    /// </summary>
+    /// <param name="nickName">Никнейм.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>User.</returns>
     public async Task<User> GetByNickNameAsync(string nickName, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users
-            .Include(u => u.Works)
-            .Include(u => u.WorkLikes)
-            .Include(u => u.UserTags)
-            .Include(u => u.Comments)
-            .FirstOrDefaultAsync(p => p.NickName == nickName, cancellationToken);
+        return await _dbContext.Users.FirstOrDefaultAsync(p => p.NickName == nickName, cancellationToken);
+    }
+
+    /// <summary>
+    /// Получение всех User
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Список User.</returns>
+    public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users.ToListAsync(cancellationToken);
     }
     
     /// <summary>

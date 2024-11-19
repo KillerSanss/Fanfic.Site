@@ -22,12 +22,12 @@ public class WorkLikeConfiguration : IEntityTypeConfiguration<WorkLike>
         builder.Property(p => p.UserId)
             .HasColumnName("user_id");
 
-        builder.HasOne<Work>(p => p.Work)
+        builder.HasOne(p => p.Work)
             .WithMany(p => p.WorkLikes)
             .HasForeignKey(p => p.WorkId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.HasOne<User>(p => p.User)
+        builder.HasOne(p => p.User)
             .WithMany(p => p.WorkLikes)
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);

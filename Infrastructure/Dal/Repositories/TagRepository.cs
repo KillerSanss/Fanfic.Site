@@ -13,6 +13,10 @@ public class TagRepository : ITagRepository
 {
     private readonly FanficSiteDbContext _dbContext;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст базы данных.</param>
     public TagRepository(FanficSiteDbContext dbContext)
     {
         _dbContext = dbContext;

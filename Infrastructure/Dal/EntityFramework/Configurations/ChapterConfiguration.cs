@@ -38,12 +38,12 @@ public class ChapterConfiguration : IEntityTypeConfiguration<Chapter>
             .IsRequired()
             .HasColumnName("content");
         
-        builder.HasOne<User>(p => p.User)
+        builder.HasOne(p => p.User)
             .WithMany()
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.HasOne<Work>(p => p.Work)
+        builder.HasOne(p => p.Work)
             .WithMany(p => p.Chapters)
             .HasForeignKey(p => p.WorkId)
             .OnDelete(DeleteBehavior.Cascade);

@@ -34,12 +34,12 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
             .IsRequired()
             .HasColumnName("content");
         
-        builder.HasOne<User>(p => p.User)
+        builder.HasOne(p => p.User)
             .WithMany(p => p.Comments)
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.HasOne<Chapter>(p => p.Chapter)
+        builder.HasOne(p => p.Chapter)
             .WithMany(p => p.Comments) 
             .HasForeignKey(p => p.ChapterId) 
             .OnDelete(DeleteBehavior.Cascade);

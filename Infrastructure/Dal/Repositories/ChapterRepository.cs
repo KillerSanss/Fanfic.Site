@@ -13,6 +13,10 @@ public class ChapterRepository : IChapterRepository
 {
     private readonly FanficSiteDbContext _dbContext;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст базы данных.</param>
     public ChapterRepository(FanficSiteDbContext dbContext)
     {
         _dbContext = dbContext;

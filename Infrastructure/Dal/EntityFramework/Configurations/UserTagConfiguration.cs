@@ -19,12 +19,12 @@ public class UserTagConfiguration : IEntityTypeConfiguration<UserTag>
         builder.Property(p => p.TagId)
             .HasColumnName("tag_id");
 
-        builder.HasOne<Tag>(p => p.Tag)
+        builder.HasOne(p => p.Tag)
             .WithMany(p => p.UserTags)
             .HasForeignKey(p => p.TagId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne<User>(p => p.User)
+        builder.HasOne(p => p.User)
             .WithMany(p => p.UserTags)
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);

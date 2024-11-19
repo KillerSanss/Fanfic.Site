@@ -22,12 +22,12 @@ public class WorkTagConfiguration : IEntityTypeConfiguration<WorkTag>
         builder.Property(p => p.TagId)
             .HasColumnName("tag_id");
 
-        builder.HasOne<Work>(p => p.Work)
+        builder.HasOne(p => p.Work)
             .WithMany(p => p.WorkTags)
             .HasForeignKey(p => p.WorkId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.HasOne<Tag>(p => p.Tag)
+        builder.HasOne(p => p.Tag)
             .WithMany(p => p.WorkTags)
             .HasForeignKey(p => p.TagId)
             .OnDelete(DeleteBehavior.Cascade);

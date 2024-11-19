@@ -12,6 +12,10 @@ public class UserTagRepository : IUserTagRepository
 {
     private readonly FanficSiteDbContext _dbContext;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст базы данных.</param>
     public UserTagRepository(FanficSiteDbContext dbContext)
     {
         _dbContext = dbContext;

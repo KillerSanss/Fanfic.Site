@@ -54,13 +54,13 @@ public class WorkConfiguration : IEntityTypeConfiguration<Work>
             .IsRequired()
             .HasColumnName("views");
 
-        builder.HasOne<User>(p => p.User)
+        builder.HasOne(p => p.User)
             .WithMany(p => p.Works)
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(p => p.Chapters)
-            .WithOne()
+            .WithOne(p => p.Work)
             .HasForeignKey(p => p.WorkId)
             .OnDelete(DeleteBehavior.Cascade);
     }

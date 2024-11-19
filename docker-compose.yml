@@ -1,18 +1,35 @@
-﻿services:
-  infrastructure:
-    image: infrastructure
-    build:
-      context: .
-      dockerfile: Infrastructure/Dockerfile
+﻿version: '3.8'
 
-  infrastructure-1:
-    image: infrastructure-1
+services:
+  database:
+    image: postgres
+    container_name: fanficSite
+    environment:
+      POSTGRES_DB: FanficSite
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sans
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  api:
     build:
       context: .
       dockerfile: Infrastructure/Dockerfile
+    container_name: fanficSite_api
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=FanficSite;Username=postgres;Password=sans
+    ports:
+      - "5121:80"
+      - "5122:443"
 
-  infrastructure-2:
-    image: infrastructure-2
-    build:
-      context: .
-      dockerfile: Infrastructure/Dockerfile
+volumes:
+  database_data:

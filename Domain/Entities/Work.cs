@@ -57,17 +57,17 @@ public class Work : BaseEntity
     /// <summary>
     /// Комментарии
     /// </summary>
-    public ICollection<Chapter> Chapters = new List<Chapter>();
+    public ICollection<Chapter> Chapters { get; set; }
     
     /// <summary>
     /// Список лайков
     /// </summary>
-    public ICollection<WorkLike> WorkLikes = new List<WorkLike>();
+    public ICollection<WorkLike> WorkLikes { get; set; }
     
     /// <summary>
     /// Тэги
     /// </summary>
-    public ICollection<WorkTag> WorkTags = new List<WorkTag>();
+    public ICollection<WorkTag> WorkTags { get; set; }
 
     /// <summary>
     /// Конструктор

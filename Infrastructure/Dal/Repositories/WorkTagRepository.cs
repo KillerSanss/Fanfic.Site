@@ -13,6 +13,10 @@ public class WorkTagRepository : IWorkTagRepository
 {
     private readonly FanficSiteDbContext _dbContext;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст базы данных.</param>
     public WorkTagRepository(FanficSiteDbContext dbContext)
     {
         _dbContext = dbContext;

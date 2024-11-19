@@ -103,15 +103,13 @@ public class User : BaseEntity
     /// <param name="gender">Гендер.</param>
     /// <param name="email">Электронная почта.</param>
     /// <param name="password">Пароль.</param>
-    /// <param name="avatarUrl">Аватар.</param>
     public User(
         Guid id,
         string nickName,
         DateTime birthDate,
         Gender gender,
         string email,
-        string password,
-        string avatarUrl)
+        string password)
     {
         SetId(id);
         NickName = nickName;
@@ -120,7 +118,6 @@ public class User : BaseEntity
         Gender = gender;
         Email = email;
         Password = password;
-        AvatarUrl = avatarUrl;
         IsEmail = true;
         IsShowEmail = false;
         IsTelegram = false;
@@ -137,22 +134,19 @@ public class User : BaseEntity
     /// <param name="gender">Гендер.</param>
     /// <param name="email">Электронная почта.</param>
     /// <param name="password">Пароль</param>
-    /// <param name="avatarUrl"></param>
     /// <returns>Обновленный пользователь.</returns>
     public User Update(
         string nickName,
         DateTime birthDate,
         Gender gender,
         string email,
-        string password,
-        string avatarUrl)
+        string password)
     {
         NickName = nickName;
         BirthDate = birthDate;
         Gender = gender;
         Email = email;
         Password = password;
-        AvatarUrl = avatarUrl;
         
         Validate();
         

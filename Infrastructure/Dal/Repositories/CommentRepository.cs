@@ -13,6 +13,10 @@ public class CommentRepository : ICommentRepository
 {
     private readonly FanficSiteDbContext _dbContext;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст базы данных.</param>
     public CommentRepository(FanficSiteDbContext dbContext)
     {
         _dbContext = dbContext;

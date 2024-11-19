@@ -13,6 +13,10 @@ public class WorkLikeRepository : IWorkLikeRepository
 {
     private readonly FanficSiteDbContext _dbContext;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст базы данных.</param>
     public WorkLikeRepository(FanficSiteDbContext dbContext)
     {
         _dbContext = dbContext;
