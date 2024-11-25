@@ -3,13 +3,16 @@ using Google.Cloud.Storage.V1;
 namespace Application.Services;
 
 /// <summary>
-/// Сервис облака гугл
+/// Сервис GoogleCloud
 /// </summary>
 public class GoogleCloudService
 {
     private readonly StorageClient _storageClient;
     private readonly string _bucketName;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
     public GoogleCloudService()
     {
         var credentialsPath = "C:\\Users\\vantu\\Desktop\\Fanfic\\fanficsitecloudstorage-795b5b0f6e48.json";

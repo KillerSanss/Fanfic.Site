@@ -9,7 +9,7 @@ namespace Application.Interfaces.BaseRepositories;
 /// <summary>
 /// Базовый репозиторий чтения
 /// </summary>
-public interface IReadRepository<TEntity> where TEntity : BaseEntity
+public interface IReadRepository<TEntity>
 {
     /// <summary>
     /// Получение по идентификатору

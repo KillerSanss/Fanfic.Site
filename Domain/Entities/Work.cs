@@ -32,7 +32,7 @@ public class Work : BaseEntity
     /// <summary>
     /// Дата публикации
     /// </summary>
-    public DateTime PublicationDate { get; set; }
+    public DateTime PublicationDate { get; set; } = DateTime.Now;
     
     /// <summary>
     /// Категория
@@ -77,22 +77,18 @@ public class Work : BaseEntity
     /// <param name="title">Название.</param>
     /// <param name="description">Описание.</param>
     /// <param name="category">Категория.</param>
-    /// <param name="coverUrl">Обложка.</param>
     public Work(
         Guid id,
         Guid userId,
         string title,
         string description,
-        Category category,
-        string coverUrl)
+        Category category)
     {
         SetId(id);
         UserId = userId;
         Title = title;
         Description = description;
-        PublicationDate = DateTime.Now;
         Category = category;
-        CoverUrl = coverUrl;
         
         Validate();
     }
@@ -103,44 +99,40 @@ public class Work : BaseEntity
     /// <param name="title">Название.</param>
     /// <param name="description">Описание.</param>
     /// <param name="category">Категория.</param>
-    /// <param name="coverUrl">Обложка.</param>
     /// <returns>Обновленная работа.</returns>
     public Work Update(
         string title,
         string description,
-        Category category,
-        string coverUrl)
+        Category category)
     {
         Title = title;
         Description = description;
         Category = category;
-        CoverUrl = coverUrl;
-        
-        WorkTags.Clear();
 
         Validate();
         
         return this;
     }
     
+
     /// <summary>
-    /// Увеличивает количество лайков на 1.
+    /// Увеличивает количество лайков
     /// </summary>
-    public void IncrementLike()
+    public Work IncrementLike()
     {
         Likes++;
-        
-        Validate();
+
+        return this;
     }
 
     /// <summary>
-    /// Уменьшает количество лайков на 1.
+    /// Уменьшает количество лайков
     /// </summary>
-    public void DecrementLike()
+    public Work DecrementLike()
     {
         Likes--;
-        
-        Validate();
+
+        return this;
     }
 
     /// <summary>

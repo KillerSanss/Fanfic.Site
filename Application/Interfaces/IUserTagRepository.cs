@@ -10,7 +10,7 @@ namespace Application.Interfaces;
 /// <summary>
 /// Интерфейс описывающий UserTagRepository
 /// </summary>
-public interface IUserTagRepository : IBaseRepository<UserTag>, IWriteRepository<UserTag>
+public interface IUserTagRepository : IBaseRepository<UserTag>, IBulkWriteRepository<UserTag>
 {
     /// <summary>
     /// Проверка наличия лайка у пользователя на тэге
@@ -27,11 +27,4 @@ public interface IUserTagRepository : IBaseRepository<UserTag>, IWriteRepository
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Список UserTag.</returns>
     public Task<List<UserTag>> GetAllUserTags(Guid userId, CancellationToken cancellationToken);
-    
-    /// <summary>
-    /// Удаление UserTag
-    /// </summary>
-    /// <param name="userTag">UserTag.</param>
-    /// <param name="cancellationToken">Токен отмены.</param>
-    public Task DeleteAsync(UserTag userTag, CancellationToken cancellationToken);
 }

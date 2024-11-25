@@ -21,6 +21,9 @@ public class BotService
     private readonly TelegramBotClient _telegramBotClient;
     private readonly Dictionary<long, bool> _awaitingNicknames = new();
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
     public BotService(
         IServiceScopeFactory scopeFactory,
         IOptions<ApiSettings> apiSettings)
@@ -218,7 +221,7 @@ public class BotService
         }
         
         var inlineKeyboardButtons = user.Works
-            .Select(work => InlineKeyboardButton.WithUrl(work.Title, $"http://192.168.6.117:8087/works/{work.Id}"))
+            .Select(work => InlineKeyboardButton.WithUrl(work.Id.ToString(), $"http://192.168.6.117:8087/works/{work.Id}"))
             .Select(button => new[] { button })
             .ToList();
         

@@ -74,6 +74,7 @@ public class ChapterRepository : IChapterRepository
         return await _dbContext.Chapters
             .Include(c => c.Work)
             .Include(c => c.User)
+            .Include(c => c.Comments)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
@@ -87,6 +88,7 @@ public class ChapterRepository : IChapterRepository
         return await _dbContext.Chapters
             .Include(c => c.Work)
             .Include(c => c.User)
+            .Include(c => c.Comments)
             .ToListAsync(cancellationToken);
     }
     
@@ -101,6 +103,7 @@ public class ChapterRepository : IChapterRepository
         return await _dbContext.Chapters
             .Include(c => c.Work)
             .Include(c => c.User)
+            .Include(c => c.Comments)
             .Where(p => p.WorkId == workId)
             .ToListAsync(cancellationToken);
     }

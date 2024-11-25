@@ -34,7 +34,7 @@ public class UserController : ControllerBase
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Новый User.</returns>
     [HttpPost("register")]
-    public async Task<ActionResult> Register(
+    public async Task<ActionResult> RegisterUser(
         [FromForm] RegistrationRequest registrationRequest,
         IFormFile avatarFile, 
         CancellationToken cancellationToken)
@@ -50,7 +50,7 @@ public class UserController : ControllerBase
                 avatarFile.ContentType,
                 cancellationToken);
 
-            return Ok(registrationResponse);
+            return Created(nameof(RegisterUser), registrationResponse);
         }
     }
     
@@ -187,7 +187,7 @@ public class UserController : ControllerBase
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>User.</returns>
     [HttpGet("{userId:guid}")]
-    public async Task<ActionResult<GetByIdUserResponse>> GetByIdUser(
+    public async Task<ActionResult<GetUserResponse>> GetByIdUser(
         [FromRoute] Guid userId,
         CancellationToken cancellationToken)
     {

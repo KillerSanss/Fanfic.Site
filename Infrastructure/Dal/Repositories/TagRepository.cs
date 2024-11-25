@@ -62,7 +62,7 @@ public class TagRepository : ITagRepository
         _dbContext.Tags.Remove(tag);
         return Task.CompletedTask;
     }
-    
+
     /// <summary>
     /// Получение Tag по идентификатору
     /// </summary>
@@ -73,10 +73,10 @@ public class TagRepository : ITagRepository
     {
         return await _dbContext.Tags
             .Include(t => t.WorkTags)
-            .Include(t => t.UserTags)
+                .ThenInclude(wt => wt.Work)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
-    
+
     /// <summary>
     /// Получение всех Tag
     /// </summary>
@@ -86,7 +86,7 @@ public class TagRepository : ITagRepository
     {
         return await _dbContext.Tags
             .Include(t => t.WorkTags)
-            .Include(t => t.UserTags)
+                .ThenInclude(wt => wt.Work)
             .ToListAsync(cancellationToken);
     }
     

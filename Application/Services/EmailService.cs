@@ -7,12 +7,16 @@ using MimeKit;
 namespace Application.Services;
 
 /// <summary>
-/// Сервис электронной почты
+/// Сервис Email
 /// </summary>
 public class EmailService
 {
     private readonly SmtpSettings _smtpSettings;
 
+    /// <summary>
+    /// Настройки
+    /// </summary>
+    /// <param name="smtpSettings">Email настройки.</param>
     public EmailService(IOptions<SmtpSettings> smtpSettings)
     {
         _smtpSettings = smtpSettings.Value;

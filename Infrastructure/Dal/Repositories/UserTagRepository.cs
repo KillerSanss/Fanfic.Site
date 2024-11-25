@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Domain.Entities;
+using EFCore.BulkExtensions;
 using Infrastructure.Dal.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,38 +23,33 @@ public class UserTagRepository : IUserTagRepository
     }
     
     /// <summary>
-    /// Добавление UserTag
+    /// Массовое добавление UserTag
     /// </summary>
-    /// <param name="userTag">UserTag.</param>
+    /// <param name="userTags">Список UserTag.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    /// <returns>UserTag.</returns>
-    public async Task<UserTag> AddAsync(UserTag userTag, CancellationToken cancellationToken)
+    public async Task BulkAddAsync(IEnumerable<UserTag> userTags, CancellationToken cancellationToken)
     {
-        await _dbContext.UserTags.AddAsync(userTag, cancellationToken);
-        return userTag;
+        await _dbContext.BulkInsertAsync(userTags, cancellationToken: cancellationToken);
     }
 
     /// <summary>
-    /// Обновление UserTag
+    /// Массовое обновление UserTag
     /// </summary>
-    /// <param name="userTag">UserTag.</param>
+    /// <param name="userTags">Список UserTag.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    /// <returns>UserTag.</returns>
-    public Task<UserTag> UpdateAsync(UserTag userTag, CancellationToken cancellationToken)
+    public async Task BulkUpdateAsync(IEnumerable<UserTag> userTags, CancellationToken cancellationToken)
     {
-        _dbContext.UserTags.Update(userTag);
-        return Task.FromResult(userTag);
+        await _dbContext.BulkUpdateAsync(userTags, cancellationToken: cancellationToken);
     }
-    
+
     /// <summary>
-    /// Удаление UserTag
+    /// Массовое удаление UserTag
     /// </summary>
-    /// <param name="userTag">UserTag.</param>
+    /// <param name="userTags">Список UserTag.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    public Task DeleteAsync(UserTag userTag, CancellationToken cancellationToken)
+    public async Task BulkDeleteAsync(IEnumerable<UserTag> userTags, CancellationToken cancellationToken)
     {
-        _dbContext.UserTags.Remove(userTag);
-        return Task.CompletedTask;
+        await _dbContext.BulkDeleteAsync(userTags, cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -75,11 +71,7 @@ public class UserTagRepository : IUserTagRepository
     /// <returns>Список UserTag.</returns>
     public async Task<List<UserTag>> GetAllUserTags(Guid userId, CancellationToken cancellationToken)
     {
-        return await _dbContext.UserTags
-            .Include(ut => ut.User)
-            .Include(ut => ut.Tag)
-            .Where(p => p.UserId == userId)
-            .ToListAsync(cancellationToken);
+        return await _dbContext.UserTags.Where(p => p.UserId == userId).ToListAsync(cancellationToken);
     }
     
     /// <summary>

@@ -25,7 +25,7 @@ public class WorkLikeRepository : IWorkLikeRepository
     /// <summary>
     /// Массовое добавление WorkLike
     /// </summary>
-    /// <param name="workLikes">Список WorkLIke.</param>
+    /// <param name="workLikes">Список WorkLike.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task BulkAddAsync(IEnumerable<WorkLike> workLikes, CancellationToken cancellationToken)
     {
@@ -71,11 +71,7 @@ public class WorkLikeRepository : IWorkLikeRepository
     /// <returns>Список WorkLike.</returns>
     public async Task<List<WorkLike>> GetAllWorkLikesAsync(Guid workId, CancellationToken cancellationToken)
     {
-        return await _dbContext.WorkLikes
-            .Include(wl => wl.User)
-            .Include(wl => wl.WorkId)
-            .Where(p => p.WorkId == workId)
-            .ToListAsync(cancellationToken);
+        return await _dbContext.WorkLikes.Where(p => p.WorkId == workId).ToListAsync(cancellationToken);
     }
     
     /// <summary>

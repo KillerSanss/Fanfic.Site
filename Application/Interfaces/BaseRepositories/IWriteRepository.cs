@@ -5,7 +5,7 @@ namespace Application.Interfaces.BaseRepositories;
 /// <summary>
 /// Базовый репозиторий записи
 /// </summary>
-public interface IWriteRepository<TEntity> where TEntity : BaseEntity
+public interface IWriteRepository<TEntity>
 {
     /// <summary>
     /// Добавление сущности

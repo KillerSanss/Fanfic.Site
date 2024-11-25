@@ -72,13 +72,11 @@ public class WorkRepository : IWorkRepository
     public async Task<Work> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbContext.Works
-            .Include(w => w.User)
-            .Include(w => w.Chapters)
-            .ThenInclude(wl => wl.Comments)
-            .Include(w => w.WorkLikes)
-            .ThenInclude(wl => wl.User)
             .Include(w => w.WorkTags)
-            .ThenInclude(wl => wl.Tag)
+                .ThenInclude(wt => wt.Tag)
+            .Include(w => w.WorkLikes)
+                .ThenInclude(wt => wt.User)
+            .Include(w => w.Chapters)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
@@ -90,13 +88,11 @@ public class WorkRepository : IWorkRepository
     public async Task<List<Work>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _dbContext.Works
-            .Include(w => w.User)
-            .Include(w => w.Chapters)
-            .ThenInclude(wl => wl.Comments)
-            .Include(w => w.WorkLikes)
-            .ThenInclude(wl => wl.User)
             .Include(w => w.WorkTags)
-            .ThenInclude(wl => wl.Tag)
+                .ThenInclude(wt => wt.Tag)
+            .Include(w => w.WorkLikes)
+                .ThenInclude(wt => wt.User)
+            .Include(w => w.Chapters)
             .ToListAsync(cancellationToken);
     }
 
@@ -109,13 +105,11 @@ public class WorkRepository : IWorkRepository
     public async Task<List<Work>> GetAllUserWorkAsync(Guid userId, CancellationToken cancellationToken)
     {
         return await _dbContext.Works
-            .Include(w => w.User)
-            .Include(w => w.Chapters)
-            .ThenInclude(wl => wl.Comments)
-            .Include(w => w.WorkLikes)
-            .ThenInclude(wl => wl.User)
             .Include(w => w.WorkTags)
-            .ThenInclude(wl => wl.Tag)
+                .ThenInclude(wt => wt.Tag)
+            .Include(w => w.WorkLikes)
+                .ThenInclude(wt => wt.User)
+            .Include(w => w.Chapters)
             .Where(p => p.UserId == userId)
             .ToListAsync(cancellationToken);
     }

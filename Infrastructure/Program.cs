@@ -6,11 +6,16 @@ using Application.Interfaces;
 using Application.Mapping;
 using Application.Services;
 using Application.Settings;
+using Infrastructure.Background.ChapterBackground;
+using Infrastructure.Background.CommentBackground;
+using Infrastructure.Background.TagBackground;
+using Infrastructure.Background.TagBackground.UserTagBackground;
+using Infrastructure.Background.WorkBackground;
+using Infrastructure.Background.WorkBackground.WorkLikeBackground;
 using Infrastructure.Dal.EntityFramework;
 using Infrastructure.Dal.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -57,6 +62,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["Redis:Configuration"];
+    options.InstanceName = builder.Configuration["Redis:InstanceName"];
+});
+
 builder.Services.AddScoped<IWorkRepository, WorkRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
@@ -67,12 +78,43 @@ builder.Services.AddScoped<IWorkLikeRepository, WorkLikeRepository>();
 builder.Services.AddScoped<IUserTagRepository, UserTagRepository>();
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<TagService>();
+builder.Services.AddScoped<UserTagService>();
+builder.Services.AddScoped<WorkService>();
+builder.Services.AddScoped<WorkTagService>();
+builder.Services.AddScoped<WorkLikeService>();
+builder.Services.AddScoped<ChapterService>();
+builder.Services.AddScoped<CommentService>();
+
 builder.Services.AddScoped<BotService>();
+
+builder.Services.AddHostedService<CreateTagBackgroundService>();
+builder.Services.AddHostedService<UpdateTagBackgroundService>();
+builder.Services.AddHostedService<UserTagBackgroundService>();
+
+builder.Services.AddHostedService<CreateWorkBackgroundService>();
+builder.Services.AddHostedService<UpdateWorkBackgroundService>();
+builder.Services.AddHostedService<WorkLikeBackgroundService>();
+
+builder.Services.AddHostedService<CreateChapterBackgroundService>();
+builder.Services.AddHostedService<UpdateChapterBackgroundService>();
+
+builder.Services.AddHostedService<CreateCommentBackgroundService>();
+builder.Services.AddHostedService<UpdateCommentBackgroundService>();
+
+builder.Services.AddScoped<AddToCache>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<EmailMessages>();
 builder.Services.AddScoped<BotMessage>();
 
 builder.Services.AddAutoMapper(typeof(UserMappingProfile));
+builder.Services.AddAutoMapper(typeof(TagMappingProfile));
+builder.Services.AddAutoMapper(typeof(WorkMappingProfile));
+builder.Services.AddAutoMapper(typeof(WorkTagMappingProfile));
+builder.Services.AddAutoMapper(typeof(WorkLikeMappingProfile));
+builder.Services.AddAutoMapper(typeof(UserTagMappingProfile));
+builder.Services.AddAutoMapper(typeof(ChapterMappingProfile));
+builder.Services.AddAutoMapper(typeof(CommentMappingProfile));
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 builder.Services.AddAuthentication(x =>
@@ -119,6 +161,14 @@ builder.Services.AddCors(options =>
                 .AllowAnyHeader();
         });
 });
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
+        
 
 
 

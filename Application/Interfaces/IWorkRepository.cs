@@ -19,4 +19,11 @@ public interface IWorkRepository : IBaseRepository<Work>, IReadRepository<Work>,
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Список Work.</returns>
     public Task<List<Work>> GetAllUserWorkAsync(Guid userId, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Удаление Work
+    /// </summary>
+    /// <param name="work">Work на удаление.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    public Task DeleteAsync(Work work, CancellationToken cancellationToken);
 }

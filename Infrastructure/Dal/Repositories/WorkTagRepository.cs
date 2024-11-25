@@ -51,6 +51,27 @@ public class WorkTagRepository : IWorkTagRepository
     {
         await _dbContext.BulkDeleteAsync(workTags, cancellationToken: cancellationToken);
     }
+    
+    /// <summary>
+    /// Получение по WorkTag по идентификатору
+    /// </summary>
+    /// <param name="tagId">Идентификатор WorkTag.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>WorkTag.</returns>
+    public async Task<WorkTag> GetByIdAsync(Guid tagId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.WorkTags.FirstOrDefaultAsync(p => p.TagId == tagId, cancellationToken);
+    }
+
+    /// <summary>
+    /// Получение всех WorkTag
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Список WorkTag.</returns>
+    public async Task<List<WorkTag>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.WorkTags.ToListAsync(cancellationToken);
+    }
 
     /// <summary>
     /// Получение всех тэгов работы
@@ -60,11 +81,7 @@ public class WorkTagRepository : IWorkTagRepository
     /// <returns>Список WorkTag.</returns>
     public async Task<List<WorkTag>> GetAllWorkTagsAsync(Guid workId, CancellationToken cancellationToken)
     {
-        return await _dbContext.WorkTags
-            .Include(wt => wt.Work)
-            .Include(wt => wt.Tag)
-            .Where(p => p.WorkId == workId)
-            .ToListAsync(cancellationToken);
+        return await _dbContext.WorkTags.Where(p => p.WorkId == workId).ToListAsync(cancellationToken);
     }
 
     /// <summary>
@@ -75,11 +92,7 @@ public class WorkTagRepository : IWorkTagRepository
     /// <returns>Список WorkTag.</returns>
     public async Task<List<WorkTag>> GetAllWorkTagsByTagIdAsync(Guid tagId, CancellationToken cancellationToken)
     {
-        return await _dbContext.WorkTags
-            .Include(wt => wt.Work)
-            .Include(wt => wt.Tag)
-            .Where(p => p.TagId == tagId)
-            .ToListAsync(cancellationToken);
+        return await _dbContext.WorkTags.Where(p => p.TagId == tagId).ToListAsync(cancellationToken);
     }
     
     /// <summary>

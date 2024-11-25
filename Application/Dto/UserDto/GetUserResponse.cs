@@ -1,12 +1,12 @@
-using Domain.Entities;
+using Application.Dto.CommentDto;
+using Application.Dto.UserTagDto;
+using Application.Dto.WorkDto;
+using Application.Dto.WorkLikeDto;
 using Domain.Primitives;
 
 namespace Application.Dto.UserDto;
 
-/// <summary>
-/// Дто ответа на получение User по идентификатору телеграма
-/// </summary>
-public class GetByTelegramIdUserResponse
+public class GetUserResponse
 {
     /// <summary>
     /// Идентификатор
@@ -81,20 +81,20 @@ public class GetByTelegramIdUserResponse
     /// <summary>
     /// Список Work
     /// </summary>
-    public List<Work> Works { get; init; }
+    public ICollection<GetUserWorkResponse> Works { get; init; }
     
     /// <summary>
     /// Список WorkLike
     /// </summary>
-    public List<WorkLike> WorksLikes { get; init; }
+    public ICollection<GetUserLikesResponse> WorksLikes { get; init; }
     
     /// <summary>
     /// Список UserTag
     /// </summary>
-    public List<UserTag> UserTags { get; init; }
+    public ICollection<GetUserTagsResponse> UserTags { get; init; }
     
     /// <summary>
     /// Список Comment
     /// </summary>
-    public List<Comment> Comments { get; init; }
+    public ICollection<GetUserCommentResponse> Comments { get; init; }
 }

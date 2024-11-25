@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(FanficSiteDbContext))]
-    [Migration("20241119084600_Initial")]
-    partial class Initial
+    [Migration("20241120213805_Migration 20.11.2024")]
+    partial class Migration20112024
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -215,9 +215,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("tag_id");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
                     b.HasKey("UserId", "TagId");
 
                     b.HasIndex("TagId");
@@ -288,9 +285,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
                     b.HasKey("WorkId", "UserId");
 
                     b.HasIndex("UserId");
@@ -307,9 +301,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("TagId")
                         .HasColumnType("uuid")
                         .HasColumnName("tag_id");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
 
                     b.HasKey("WorkId", "TagId");
 

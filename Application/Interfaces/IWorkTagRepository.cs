@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Application.Interfaces.BaseRepositories;
 using Domain.Entities;
 
@@ -10,7 +6,7 @@ namespace Application.Interfaces;
 /// <summary>
 /// Интерфейс описывающий WorkTagRepository
 /// </summary>
-public interface IWorkTagRepository : IBaseRepository<WorkTag>, IBulkWriteRepository<WorkTag>
+public interface IWorkTagRepository : IBaseRepository<WorkTag>, IBulkWriteRepository<WorkTag>, IReadRepository<WorkTag>
 {
     /// <summary>
     /// Получение всех тэгов работы

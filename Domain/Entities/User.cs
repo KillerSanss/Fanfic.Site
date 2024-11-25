@@ -17,7 +17,7 @@ public class User : BaseEntity
     /// <summary>
     /// Дата регистрации
     /// </summary>
-    public DateTime RegistrationDate { get; set; }
+    public DateTime RegistrationDate { get; set; } = DateTime.Now;
     
     /// <summary>
     /// Дата рождения
@@ -113,7 +113,6 @@ public class User : BaseEntity
     {
         SetId(id);
         NickName = nickName;
-        RegistrationDate = DateTime.Now;
         BirthDate = birthDate;
         Gender = gender;
         Email = email;

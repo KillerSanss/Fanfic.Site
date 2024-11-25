@@ -8,7 +8,7 @@ namespace Application.Interfaces.BaseRepositories;
 /// <summary>
 /// Базовый репозиторий массовой записи
 /// </summary>
-public interface IBulkWriteRepository<TEntity> where TEntity : BaseEntity
+public interface IBulkWriteRepository<TEntity>
 {
     /// <summary>
     /// Массовое создание сущностей

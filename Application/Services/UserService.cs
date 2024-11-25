@@ -17,18 +17,26 @@ namespace Application.Services;
 /// </summary>
 public class UserService
 {
-    private readonly EmailService _emailService;
-    private readonly EmailMessages _emailMessages;
-    
     private readonly IUserRepository _userRepository;
 
     private readonly GoogleCloudService _googleCloudService;
     private readonly IMapper _mapper;
-    
     private readonly string _secretKey;
+    
+    private readonly EmailService _emailService;
+    private readonly EmailMessages _emailMessages;
     private readonly BotMessage _botMessage;
-
-
+    
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="emailService">Сервис Email.</param>
+    /// <param name="emailMessages">EmailMessages.</param>
+    /// <param name="userRepository">Репозиторий User.</param>
+    /// <param name="googleCloudService">Сервис GoogleCloud.</param>
+    /// <param name="mapper">Автомаппер.</param>
+    /// <param name="botMessage">BotMessages.</param>
+    /// <param name="apiSettings">Настройки Api.</param>
     public UserService(
         EmailService emailService,
         EmailMessages emailMessages,
@@ -38,22 +46,21 @@ public class UserService
         BotMessage botMessage,
         IOptions<ApiSettings> apiSettings)
     {
-        _emailService = Guard.Against.Null(emailService);
-        _emailMessages = Guard.Against.Null(emailMessages);
-
         _userRepository = Guard.Against.Null(userRepository);
 
         _googleCloudService = Guard.Against.Null(googleCloudService);
         _mapper = Guard.Against.Null(mapper);
-        
         _secretKey = Guard.Against.Null(apiSettings.Value.Secret);
+        
+        _emailService = Guard.Against.Null(emailService);
+        _emailMessages = Guard.Against.Null(emailMessages);
         _botMessage = Guard.Against.Null(botMessage);
     }
 
     /// <summary>
     /// Регистрация User
     /// </summary>
-    /// <param name="registrationRequest">Данные для регистрации.</param>
+    /// <param name="registrationRequest">Данные для User.</param>
     /// <param name="avatarFile">Аватар.</param>
     /// <param name="fileName">Название файла.</param>
     /// <param name="contentType">Тип файла.</param>
@@ -72,10 +79,7 @@ public class UserService
         if (_userRepository.IsUniqueUser(user.Email))
             return null;
         
-        user.AvatarUrl = await _googleCloudService.UploadFileAsync(
-            avatarFile,
-            fileName + $"-{Guid.NewGuid().ToString()}",
-            contentType);
+        user.AvatarUrl = await _googleCloudService.UploadFileAsync(avatarFile, fileName + $"-{Guid.NewGuid().ToString()}", contentType);
 
         await _userRepository.AddAsync(user, cancellationToken);
         await _userRepository.SaveChangesAsync(cancellationToken);
@@ -88,7 +92,7 @@ public class UserService
     /// <summary>
     /// Обновление User
     /// </summary>
-    /// <param name="userRequest">Данные для обновления.</param>
+    /// <param name="userRequest">Данные для обновления User.</param>
     /// <param name="fileStream">Аватар.</param>
     /// <param name="fileName">Название файла</param>
     /// <param name="contentType">Тип файла.</param>
@@ -153,11 +157,11 @@ public class UserService
     /// <summary>
     /// Удаление User
     /// </summary>
-    /// <param name="id">Идентификатор.</param>
+    /// <param name="userId">Идентификатор User.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var user = await GetByIdUser(id, cancellationToken);
+        var user = await GetByIdUser(userId, cancellationToken);
         await _userRepository.DeleteAsync(user, cancellationToken);
         await _userRepository.SaveChangesAsync(cancellationToken);
         
@@ -227,25 +231,23 @@ public class UserService
             Expires = DateTime.Now.AddHours(12),
             SigningCredentials = new(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_secretKey)), SecurityAlgorithms.HmacSha256Signature)
         };
-
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        LoginResponse loginResponse = new LoginResponse { Token = tokenHandler.WriteToken(token) };
         
         await _botMessage.SendMessage(user, user, "Вы успешно вошли в аккаунт", true, cancellationToken);
 
-        return loginResponse;
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return new LoginResponse { Token = tokenHandler.WriteToken(token) };
     }
     
     /// <summary>
     /// Получение User по идентификатору
     /// </summary>
-    /// <param name="id">Идентификатор.</param>
+    /// <param name="userId">Идентификатор User.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>User.</returns>
-    public async Task<GetByIdUserResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<GetUserResponse> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var user = await GetByIdUser(id, cancellationToken);
-        return _mapper.Map<GetByIdUserResponse>(user);
+        var user = await GetByIdUser(userId, cancellationToken);
+        return _mapper.Map<GetUserResponse>(user);
     }
 
     /// <summary>
@@ -254,10 +256,10 @@ public class UserService
     /// <param name="telegramId">Идентификатор телеграма.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>User.</returns>
-    public async Task<GetByTelegramIdUserResponse> GetByTelegramIdAsync(string telegramId, CancellationToken cancellationToken)
+    public async Task<GetUserResponse> GetByTelegramIdAsync(string telegramId, CancellationToken cancellationToken)
     {
         var telegramUser = await _userRepository.GetByTelegramIdAsync(telegramId, cancellationToken);
-        return _mapper.Map<GetByTelegramIdUserResponse>(telegramUser);
+        return _mapper.Map<GetUserResponse>(telegramUser);
     }
     
     /// <summary>
@@ -266,10 +268,10 @@ public class UserService
     /// <param name="nickName">Никнейм.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>User.</returns>
-    public async Task<GetByNickNameUserResponse> GetByNickNameAsync(string nickName, CancellationToken cancellationToken)
+    public async Task<GetUserResponse> GetByNickNameAsync(string nickName, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByNickNameAsync(nickName, cancellationToken);
-        return _mapper.Map<GetByNickNameUserResponse>(user);
+        return _mapper.Map<GetUserResponse>(user);
     }
     
     private async Task<User> GetByIdUser(Guid id, CancellationToken cancellationToken)

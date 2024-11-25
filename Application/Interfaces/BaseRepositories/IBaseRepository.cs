@@ -5,7 +5,7 @@ namespace Application.Interfaces.BaseRepositories;
 /// <summary>
 /// Базовый репозиторий
 /// </summary>
-public interface IBaseRepository<TEntity> where TEntity : BaseEntity
+public interface IBaseRepository<TEntity>
 {
     /// <summary>
     /// Сохранение в базе

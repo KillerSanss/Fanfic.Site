@@ -6,7 +6,7 @@ namespace Domain.Entities;
 /// <summary>
 /// Промежуточная сущность для связи User и Tag
 /// </summary>
-public class UserTag : BaseEntity
+public class UserTag
 {
     /// <summary>
     /// Идентификатор пользователя
@@ -31,15 +31,12 @@ public class UserTag : BaseEntity
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="id">Идентификатор.</param>
     /// <param name="userId">Идентификатор пользователя.</param>
     /// <param name="tagId">Идентификатор тэга.</param>
     public UserTag(
-        Guid id,
         Guid userId,
         Guid tagId)
     {
-        SetId(id);
         UserId = userId;
         TagId = tagId;
         

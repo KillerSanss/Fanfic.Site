@@ -6,7 +6,7 @@ namespace Domain.Entities;
 /// <summary>
 /// Промежуточная сущность для связи лайка и Work
 /// </summary>
-public class WorkLike : BaseEntity
+public class WorkLike
 {
     /// <summary>
     /// Идентификатор пользователя
@@ -31,15 +31,12 @@ public class WorkLike : BaseEntity
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="id">Идентификатор.</param>
     /// <param name="userId">Идентификатор пользователя.</param>
     /// <param name="workId">Идентификатор работы.</param>
     public WorkLike(
-        Guid id,
         Guid userId,
         Guid workId)
     {
-        SetId(id);
         UserId = userId;
         WorkId = workId;
         

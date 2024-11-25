@@ -94,7 +94,14 @@ public class UserRepository : IUserRepository
     /// <returns>User.</returns>
     public async Task<User> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+        return await _dbContext.Users
+            .Include(w => w.UserTags)
+                .ThenInclude(wt => wt.Tag)
+            .Include(w => w.WorkLikes)
+                .ThenInclude(wt => wt.Work)
+            .Include(w => w.Works)
+            .Include(w => w.Comments)
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
     
     /// <summary>
@@ -105,7 +112,14 @@ public class UserRepository : IUserRepository
     /// <returns>User.</returns>
     public async Task<User> GetByTelegramIdAsync(string telegramId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.FirstOrDefaultAsync(p => p.TelegramId == telegramId, cancellationToken);
+        return await _dbContext.Users
+            .Include(w => w.UserTags)
+                .ThenInclude(wt => wt.Tag)
+            .Include(w => w.WorkLikes)
+                .ThenInclude(wt => wt.Work)
+            .Include(w => w.Works)
+            .Include(w => w.Comments)
+            .FirstOrDefaultAsync(p => p.TelegramId == telegramId, cancellationToken);
     }
 
     /// <summary>
@@ -116,7 +130,14 @@ public class UserRepository : IUserRepository
     /// <returns>User.</returns>
     public async Task<User> GetByNickNameAsync(string nickName, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.FirstOrDefaultAsync(p => p.NickName == nickName, cancellationToken);
+        return await _dbContext.Users
+            .Include(w => w.UserTags)
+                .ThenInclude(wt => wt.Tag)
+            .Include(w => w.WorkLikes)
+                .ThenInclude(wt => wt.Work)
+            .Include(w => w.Works)
+            .Include(w => w.Comments)
+            .FirstOrDefaultAsync(p => p.NickName == nickName, cancellationToken);
     }
 
     /// <summary>
@@ -126,7 +147,14 @@ public class UserRepository : IUserRepository
     /// <returns>Список User.</returns>
     public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.ToListAsync(cancellationToken);
+        return await _dbContext.Users
+            .Include(w => w.UserTags)
+                .ThenInclude(wt => wt.Tag)
+            .Include(w => w.WorkLikes)
+                .ThenInclude(wt => wt.Work)
+            .Include(w => w.Works)
+            .Include(w => w.Comments)
+            .ToListAsync(cancellationToken);
     }
     
     /// <summary>

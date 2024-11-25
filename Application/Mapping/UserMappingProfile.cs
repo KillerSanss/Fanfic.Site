@@ -11,9 +11,8 @@ public class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
-        CreateMap<User, GetByIdUserResponse>();
-        CreateMap<User, GetByTelegramIdUserResponse>();
-        CreateMap<User, GetByNickNameUserResponse>();
+        CreateMap<User, GetUserResponse>()
+            .ForMember(dest => dest.WorksLikes, opt => opt.MapFrom(src => src.WorkLikes));
         CreateMap<User, RegistrationResponse>();
         CreateMap<User, UpdateUserResponse>();
         CreateMap<UpdateSettingsUserRequest, UpdateSettingsUserResponse>();

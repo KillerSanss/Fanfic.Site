@@ -212,9 +212,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("tag_id");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
                     b.HasKey("UserId", "TagId");
 
                     b.HasIndex("TagId");
@@ -285,9 +282,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
                     b.HasKey("WorkId", "UserId");
 
                     b.HasIndex("UserId");
@@ -304,9 +298,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("TagId")
                         .HasColumnType("uuid")
                         .HasColumnName("tag_id");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
 
                     b.HasKey("WorkId", "TagId");
 
@@ -344,7 +335,8 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.Comment", "ParentComment")
                         .WithMany()
-                        .HasForeignKey("ParentCommentId");
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Comments")

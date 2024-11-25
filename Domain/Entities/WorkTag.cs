@@ -6,7 +6,7 @@ namespace Domain.Entities;
 /// <summary>
 /// Промежуточная сущность для связи Work и Tag
 /// </summary>
-public class WorkTag : BaseEntity
+public class WorkTag
 {
     /// <summary>
     /// Идентификатор работы
@@ -31,15 +31,12 @@ public class WorkTag : BaseEntity
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="id">Идентификатор.</param>
     /// <param name="workId">Идентификатор работы.</param>
     /// <param name="tagId">Идентификатор тэга.</param>
     public WorkTag(
-        Guid id,
         Guid workId,
         Guid tagId)
     {
-        SetId(id);
         WorkId = workId;
         TagId = tagId;
         
