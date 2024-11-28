@@ -18,6 +18,7 @@ public class WorkService
     private readonly WorkTagService _workTagService;
     private readonly WorkLikeService _workLikeService;
     private readonly ChapterService _chapterService;
+    private readonly UserService _userService;
     private readonly GoogleCloudService _googleCloudService;
     private readonly IMapper _mapper;
     private readonly AddToCache _addToCache;
@@ -39,6 +40,7 @@ public class WorkService
     /// <param name="workTagService">Сервис WorkTag.</param>
     /// <param name="workLikeService">Сервис WorkLike.</param>
     /// <param name="chapterService">Сервис Chapter.</param>
+    /// <param name="userService">Сервис User.</param>
     public WorkService(
         EmailService emailService,
         EmailMessages emailMessages,
@@ -49,7 +51,8 @@ public class WorkService
         AddToCache addToCache,
         WorkTagService workTagService,
         WorkLikeService workLikeService,
-        ChapterService chapterService)
+        ChapterService chapterService,
+        UserService userService)
     {
         _workRepository = Guard.Against.Null(workRepository);
 
@@ -63,6 +66,7 @@ public class WorkService
         _botMessage = Guard.Against.Null(botMessage);
         _emailService = Guard.Against.Null(emailService);
         _emailMessages = Guard.Against.Null(emailMessages);
+        _userService = Guard.Against.Null(userService);
     }
 
     /// <summary>
@@ -91,6 +95,13 @@ public class WorkService
         await _workTagService.CreateAsync(workTagRequests, cancellationToken);
         
         await _chapterService.CreateAsync(workRequest.ChapterRequest, work.Id, cancellationToken);
+        
+        var user = await _userService.GetByIdAsync(work.UserId, cancellationToken);
+        await _emailService.CreateEmailAsync(
+            user.Email,
+            _emailMessages.GetWorkCreateTheme(work),
+            _emailMessages.GetWorkCreateMessage(work),
+            cancellationToken);
         
         return _mapper.Map<CreateWorkResponse>(work);
     }

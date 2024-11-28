@@ -32,10 +32,6 @@ public class UpdateWorkBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Console.WriteLine("=======================================");
-            Console.WriteLine("       Фоновый сервис: Обновление работ");
-            Console.WriteLine("=======================================");
-            
             var cacheWorksKey = "CACHED-WORKS-UPDATE";
             var cacheWorkTagsKey = "CACHED-WORKTAGS-UPDATE-CREATE";
             var cacheWorkTagsDeleteKey = "CACHED-WORKTAGS-DELETE";

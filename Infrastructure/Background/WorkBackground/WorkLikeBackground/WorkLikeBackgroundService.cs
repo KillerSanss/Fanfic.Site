@@ -1,3 +1,4 @@
+
 using Application.Interfaces;
 using Ardalis.GuardClauses;
 using Domain.Entities;
@@ -32,11 +33,7 @@ public class WorkLikeBackgroundService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
-        { 
-            Console.WriteLine("==================================================");
-            Console.WriteLine("       Фоновый сервис: Добавление/удаление лайков");
-            Console.WriteLine("==================================================");
-        
+        {
             var cacheWorkLikesKey = "CACHED-WORKLIKES-CREATE";
             var cacheWorkLikesDeleteKey = "CACHED-WORKLIKES-DELETE";
             

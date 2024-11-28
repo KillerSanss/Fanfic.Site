@@ -33,10 +33,6 @@ public class CreateChapterBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Console.WriteLine("=======================================");
-            Console.WriteLine("       Фоновый сервис: Добавление глав");
-            Console.WriteLine("=======================================");
-            
             var cacheChaptersKey = "CACHED-CHAPTERS-CREATE";
             
             var cachedChapters = await _cache.GetStringAsync(cacheChaptersKey, token: stoppingToken);

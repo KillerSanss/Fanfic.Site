@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Migration20112024 : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -203,7 +203,8 @@ namespace Infrastructure.Migrations
                         name: "FK_Comments_Comments_parent_comment_id",
                         column: x => x.parent_comment_id,
                         principalTable: "Comments",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Users_user_id",
                         column: x => x.user_id,

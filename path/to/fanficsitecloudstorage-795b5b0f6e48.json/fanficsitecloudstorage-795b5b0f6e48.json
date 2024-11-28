@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "fanficsitecloudstorage",
+  "private_key_id": "795b5b0f6e487d2c1c774b130cdec0c84adef3b7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDDZQWdmpbWIDQP\naL1htsIGrr8T4Goe3UfAeUYDjtQp/aw49fcdukh6AiDJj1b+UL6YutoabLGYeO3I\ncPNT6z/RfM4U7S4c6YT5G2pjlCeCgn1nTD4RdVum7/0ghcQULuuj8enfqJqqn/WO\nPSHBcRIdTgN2qZAs/5fPRhheJ5zDCZv+6Ir9uYh/1nQWWKqEEBgkIO66yRH4a6Kr\n47JQmTq4zIxLeLO5xMxoIeHPKwo2jpgZWylAQoscEr611LehvtULg/6X5Q0q2kpY\nE1tZ/b2xuwBOrKQO0vLuFSwS+XC5qaHJ6MUQfSF5sXt5wvly/XJEgaGJyJPtB1h8\nU965NFYfAgMBAAECggEATQGQ24Kz5JLPga0pSgvRXvnao3ZDzIMwBoqlDbzqH9xy\nVgaWDBjA/Ji/HEDKK7Nd0mp9j4F74pfyOpdNRqsFvUV/IJ8zF8Dun5Bu9uzKP3S3\nAJF7Or0yUFHvxDQDyWKOis/J+NQFlK4zBApStd6eoX7//XGpORrIVS+OZfkdnn2I\nOygCIN0TcjY93CYujYhBOYb4EK79OTemy9H9xxvzwOSdYrSk4iIoEnuWZWkqmSLH\nmzSD8MEc+aPLKl3fFHIqlE+lqz6ATXaFlaDd7DEpL7qTr5NkucwMQlQH5BsENIeW\nMI0VHBy1cbwbPTG2a/hZG2o/NRiCNYoBHN3MfSxPsQKBgQDg0QZYo+0WtorYwvfc\nWIi/7cNSwgQrMvKFPGwPhXLnJy/c3mSvzIj52GnltQU85LW6YYMmE5EYwOD7q0Lj\nsl+a2jhzdHNSozjPrz5Q3chAAYHA8s5RYQ2UL9UUCtFb9x0rrgjL6VtbjyFBGNzn\nHAbYH+VS+WM6T0Lwxe8XLxyCbwKBgQDef0KE4qevOuEvl+fzuQNEEwTrgqIQNuMV\ngGNva8xqU8PxK8pmyVk85p3Qh/Oy+1XlzRfJZch1gW4vO+Yiyb2Lkkg6cd4YjQtR\np2zcP0/Jl4vXVLOdu2L/YW5S9F5+COrryYHi7eUGV37eRcqJR/6EBdd3tVgM/Bum\nXpfesCZ/UQKBgDv1o7KqbcZcAyYSwdaDyl0eBbUhx8jZurLsTYnKNr4NxocqzUHR\n1EqGfJ/mKrJ18T33Weoi19T5REf7AkkGPtdnEh1A1q0YmUNS4tTggdMIU9npKDuu\nHdgC9dp1lCbp/l6y+OeholsGDoF1Jx2AbRbhUuFRYDSiBSGAOOc/CmSDAoGBAJnf\n0RUt22Ioikvr9pJrxYJy1Ng7g/FKxEm+fQY1uy1duQk1i8kCPyELLOFm5HdHsuQ2\nrtit97CsTpOEDWjJtLit9h3VWhAIm2dhLrwzXO7CTAgjoATZ72FG9JGSRzdK240t\n0xIqDFYSdL8r7SJ8E90iXR2A4OA6CrVIfieYE0fBAoGBAJy9vMZLYS/Dh5stJGRn\nZ8sANO5ccM0leYoaPgzkyQhzX0pP6U4KNeLf5Bqv0RpeQ9sjVL/90lS4fx7eec8+\nnSubu4wBdW8DQ1SKAoC12ggvvPlSNGl/6Vmq+isoIrtGGyFaRDgFdVioFg0V0MiO\nvuTLeCoxtjNbzBa3VasIR9IY\n-----END PRIVATE KEY-----\n",
+  "client_email": "fanficsite@fanficsitecloudstorage.iam.gserviceaccount.com",
+  "client_id": "118328473926394425582",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/fanficsite%40fanficsitecloudstorage.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

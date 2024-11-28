@@ -2,10 +2,11 @@ using System.Security.Claims;
 using Application.Dto.WorkDto;
 using Application.Services;
 using Ardalis.GuardClauses;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Infrastructure.Controllers;
+namespace Api.Controllers;
 
 /// <summary>
 /// Контроллер Work
@@ -15,15 +16,19 @@ namespace Infrastructure.Controllers;
 public class WorkController : ControllerBase
 {
     private readonly WorkService _workService;
+    private readonly UserService _userService;
 
     /// <summary>
     /// Конструктор
     /// </summary>
     /// <param name="workService">WorkService.</param>
+    /// <param name="userService">UserService.</param>
     public WorkController(
-        WorkService workService)
+        WorkService workService,
+        UserService userService)
     {
         _workService = Guard.Against.Null(workService);
+        _userService = Guard.Against.Null(userService);
     }
 
     /// <summary>
@@ -41,8 +46,8 @@ public class WorkController : ControllerBase
         CancellationToken cancellationToken)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var workUser = await _workService.GetByIdAsync(workRequest.UserId, cancellationToken);
-        if (workUser.UserId != Guid.Parse(userIdClaim))
+        var workUser = await _userService.GetByIdAsync(workRequest.UserId, cancellationToken);
+        if (workUser.Id != Guid.Parse(userIdClaim))
             return Forbid("Вы не можете добавить работу для другого пользователя");
         
         var stream = coverFile.OpenReadStream();

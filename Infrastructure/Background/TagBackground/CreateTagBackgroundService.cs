@@ -31,10 +31,6 @@ public class CreateTagBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Console.WriteLine("=======================================");
-            Console.WriteLine("       Фоновый сервис: Добавление тэгов");
-            Console.WriteLine("=======================================");
-            
             var cacheKey = "CACHED-TAGS-CREATE";
             var cachedTags = await _cache.GetStringAsync(cacheKey, token: stoppingToken);
 

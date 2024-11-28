@@ -13,7 +13,6 @@ namespace Application.Services;
 public class TagService
 {
     private readonly ITagRepository _tagRepository;
-    private readonly IUserRepository _userRepository;
     
     private readonly IMapper _mapper;
     private readonly AddToCache _addToCache;
@@ -30,7 +29,6 @@ public class TagService
     /// <param name="emailMessages">EmailMessages.</param>
     /// <param name="tagRepository">Репозиторий Tag.</param>
     /// <param name="userTagService">Сервис UserTag.</param>
-    /// <param name="userRepository">Репозиторий User.</param>
     /// <param name="mapper">Автомаппер.</param>
     /// <param name="botMessage">BotMessages.</param>
     /// <param name="addToCache">AddToCache.</param>
@@ -39,14 +37,12 @@ public class TagService
         EmailMessages emailMessages,
         ITagRepository tagRepository,
         UserTagService userTagService,
-        IUserRepository userRepository,
         IMapper mapper,
         BotMessage botMessage,
         AddToCache addToCache)
     {
         _tagRepository = Guard.Against.Null(tagRepository);
         _userTagService = Guard.Against.Null(userTagService);
-        _userRepository = Guard.Against.Null(userRepository);
         
         _mapper = Guard.Against.Null(mapper);
         _addToCache = Guard.Against.Null(addToCache);
@@ -108,29 +104,27 @@ public class TagService
     /// <summary>
     /// Добавление Tag в избранное
     /// </summary>
-    /// <param name="userId">Идентификатор User.</param>
-    /// <param name="tagId">Идентификатор Tag.</param>
+    /// <param name="userTagRequest">Данные UserTag.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    public async Task FollowTagAsync(Guid userId, Guid tagId, CancellationToken cancellationToken)
+    public async Task FollowTagAsync(UserTagRequest userTagRequest, CancellationToken cancellationToken)
     {
-        if (await _userTagService.HasUserLikedWorkAsync(userId, tagId, cancellationToken))
+        if (await _userTagService.HasUserLikedWorkAsync(userTagRequest.UserId, userTagRequest.TagId, cancellationToken))
             throw new InvalidOperationException("Пользователь уже добавил данный тэг в избранное.");
         
-        await _userTagService.CreateAsync(new UserTagRequest { UserId = userId, TagId = tagId }, cancellationToken);
+        await _userTagService.CreateAsync(userTagRequest, cancellationToken);
     }
     
     /// <summary>
     /// Удаление Tag из избранного
     /// </summary>
-    /// <param name="userId">Идентификатор User.</param>
-    /// <param name="tagId">Идентификатор Tag.</param>
+    /// <param name="userTagRequest">Данные UserTag.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    public async Task UnfollowTagAsync(Guid userId, Guid tagId, CancellationToken cancellationToken)
+    public async Task UnfollowTagAsync(UserTagRequest userTagRequest, CancellationToken cancellationToken)
     {
-        if (!await _userTagService.HasUserLikedWorkAsync(userId, tagId, cancellationToken))
+        if (!await _userTagService.HasUserLikedWorkAsync(userTagRequest.UserId, userTagRequest.TagId, cancellationToken))
             throw new InvalidOperationException("Пользователь не добавил данный тэг в избранное.");
         
-        await _userTagService.DeleteAsync(new UserTagRequest { UserId = userId, TagId = tagId }, cancellationToken);
+        await _userTagService.DeleteAsync(userTagRequest, cancellationToken);
     }
     
     /// <summary>

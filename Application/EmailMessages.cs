@@ -113,26 +113,26 @@ public class EmailMessages
         );
     }
     
-    public string GetWorkCreateMessage(User user, Work work) => GetWorkMessage("New work created:", "created", user, work);
-    public string GetWorkUpdateMessage(User user, Work work) => GetWorkMessage("Work updated:", "updated", user, work);
-    public string GetWorkDeleteMessage(User user, Work work) => GetWorkMessage("Work deleted:", "deleted", user, work);
-    public string GetWorkLikeReceiveMessage(User user, Work work) => GetWorkMessage("Like received:", "liked", user, work);
-    public string GetWorkCommentReceiveMessage(User user, Work work, Comment comment) => GetWorkMessage("Comment received:", "commented", user, work, comment);
+    public string GetWorkCreateMessage(Work work) => GetWorkMessage("New work created:", "created", work);
+    public string GetWorkUpdateMessage(Work work) => GetWorkMessage("Work updated:", "updated", work);
+    public string GetWorkDeleteMessage(Work work) => GetWorkMessage("Work deleted:", "deleted", work);
+    public string GetWorkLikeReceiveMessage(Work work) => GetWorkMessage("Like received:", "liked", work);
+    public string GetWorkCommentReceiveMessage(Work work, Comment comment) => GetWorkMessage("Comment received:", "commented", work, comment);
     
-    private string GetWorkMessage(string titlePrefix, string action, User user, Work work, Comment? comment = null)
+    private string GetWorkMessage(string titlePrefix, string action, Work work, Comment? comment = null)
     {
         if (action == "deleted")
         {
             return GenerateMessage(
                 $"{titlePrefix} {work.Title}!",
-                $"Hello, {user.NickName}!<br>Your work <b>{work.Title}</b> has been {action} on FanficSite.<br>",
+                $"Hello!<br>Your work <b>{work.Title}</b> has been {action} on FanficSite.<br>",
                 "Fanfic Site",
                 "http://192.168.6.117:8087/homepage");
         }
         
         return GenerateMessage(
             $"{titlePrefix} {work.Title}!",
-            $@"Hello, {user.NickName}!<br>Your work <b>{work.Title}</b> has been {action} on FanficSite.<br>
+            $@"Hello!<br>Your work <b>{work.Title}</b> has been {action} on FanficSite.<br>
             <i>{comment?.Content}</i>",
             work.Title,
             $"http://192.168.6.117:8087/works/{work.Id}"

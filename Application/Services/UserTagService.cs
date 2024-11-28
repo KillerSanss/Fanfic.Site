@@ -40,7 +40,6 @@ public class UserTagService
         CancellationToken cancellationToken)
     {
         var userTag = _mapper.Map<UserTag>(userTagRequest);
-        
         await _addToCache.StoreInCache(userTag, "CACHED-USERTAGS-CREATE", cancellationToken);
     }
     

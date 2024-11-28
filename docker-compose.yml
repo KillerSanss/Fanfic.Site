@@ -3,7 +3,7 @@
 services:
   database:
     image: postgres
-    container_name: fanficSite
+    container_name: fanficsite_db
     environment:
       POSTGRES_DB: FanficSite
       POSTGRES_USER: postgres
@@ -15,21 +15,34 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+
   api:
     build:
       context: .
-      dockerfile: Infrastructure/Dockerfile
-    container_name: fanficSite_api
+      dockerfile: Api/Dockerfile
+    container_name: fanficsite_api
     depends_on:
       database:
         condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=FanficSite;Username=postgres;Password=sans
+      - GOOGLE_CLOUD_PROJECT=fanficsitecloudstorage
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/configs/googlecredentials.json
     ports:
       - "5121:80"
       - "5122:443"
+    volumes:
+      - ./Api/configs/googlecredentials.json:/app/configs/googlecredentials.json:ro
+    user: root
 
 volumes:
   database_data:

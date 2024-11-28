@@ -1,3 +1,4 @@
+
 using Application.Dto.ChapterDto;
 using Application.Interfaces;
 using Ardalis.GuardClauses;
@@ -34,10 +35,6 @@ public class UpdateChapterBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Console.WriteLine("======================================");
-            Console.WriteLine("       Фоновый сервис: Обновление глав");
-            Console.WriteLine("======================================");
-            
             var cacheChaptersKey = "CACHED-CHAPTERS-UPDATE";
             var cachedChapters = await _cache.GetStringAsync(cacheChaptersKey, token: stoppingToken);
 

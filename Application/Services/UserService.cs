@@ -83,8 +83,6 @@ public class UserService
 
         await _userRepository.AddAsync(user, cancellationToken);
         await _userRepository.SaveChangesAsync(cancellationToken);
-        
-        await _emailService.SendEmailAsync(user.Email, _emailMessages.GetWelcomeTheme(), _emailMessages.GetWelcomeMessage(user));
 
         return _mapper.Map<RegistrationResponse>(user);
     }
@@ -119,11 +117,6 @@ public class UserService
         user.AvatarUrl = await _googleCloudService.UploadFileAsync(fileStream, fileName + $"-{user.Id.ToString()}", contentType);
 
         await _userRepository.SaveChangesAsync(cancellationToken);
-
-        if (user.IsEmail)
-            await _emailService.SendEmailAsync(user.Email, _emailMessages.GetProfileUpdateTheme(), _emailMessages.GetProfileUpdatedMessage(user));
-        if (user.IsTelegram)
-            await _botMessage.SendMessage(user, user, "Вы обновили данные своего профиля", true, cancellationToken);
         
         return _mapper.Map<UpdateUserResponse>(user);
     }
@@ -147,9 +140,6 @@ public class UserService
             userRequest.IsShowTelegram);
         
         await _userRepository.SaveChangesAsync(cancellationToken);
-        
-        if (user.IsTelegram)
-            await _botMessage.SendMessage(user, user, "Вы обновили настройки своего профиля", true, cancellationToken);
 
         return _mapper.Map<UpdateSettingsUserResponse>(userRequest);
     }
@@ -166,11 +156,6 @@ public class UserService
         await _userRepository.SaveChangesAsync(cancellationToken);
         
         await _googleCloudService.DeleteFileAsync(user.AvatarUrl.Split("/").Last());
-        
-        if (user.IsEmail)
-            await _emailService.SendEmailAsync(user.Email, _emailMessages.GetProfileDeleteTheme(), _emailMessages.GetProfileDeletedMessage(user));
-        if (user.IsTelegram) 
-            await _botMessage.SendMessage(user, user, "Ваш профиль удален!!! Нам очень жаль что вы решили удалить ваш профиль на нашем сайте(((", false, cancellationToken);
     }
     
     /// <summary>

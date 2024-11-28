@@ -37,7 +37,6 @@ public class WorkTagService
         CancellationToken cancellationToken)
     {
         var workTags = _mapper.Map<List<WorkTag>>(workTagRequests);
-        
         await _addToCache.StoreListInCache(workTags, "CACHED-WORKTAGS-CREATE", cancellationToken);
     }
     

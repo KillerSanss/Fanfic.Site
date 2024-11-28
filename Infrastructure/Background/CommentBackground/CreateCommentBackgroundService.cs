@@ -33,10 +33,6 @@ public class CreateCommentBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Console.WriteLine("==============================================");
-            Console.WriteLine("       Фоновый сервис: Добавление комментариев");
-            Console.WriteLine("==============================================");
-            
             var cacheCommentsKey = "CACHED-COMMENTS-CREATE";
             
             var cachedComments = await _cache.GetStringAsync(cacheCommentsKey, token: stoppingToken);

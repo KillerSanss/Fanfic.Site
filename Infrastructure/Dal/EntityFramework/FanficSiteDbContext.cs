@@ -62,7 +62,7 @@ public class FanficSiteDbContext : DbContext
         base.OnConfiguring(optionsBuilder);
 
         optionsBuilder.UseNpgsql(
-            "User ID=postgres;Password=sans;Host=localhost;Port=5432;Database=FanficSite;");
+            "User ID=postgres;Password=sans;Host=fanficsite_db;Port=5432;Database=FanficSite;");
     }
 
     /// <summary>

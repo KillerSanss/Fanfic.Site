@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(FanficSiteDbContext))]
-    [Migration("20241120213805_Migration 20.11.2024")]
-    partial class Migration20112024
+    [Migration("20241126172038_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -338,7 +338,8 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.Comment", "ParentComment")
                         .WithMany()
-                        .HasForeignKey("ParentCommentId");
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Comments")

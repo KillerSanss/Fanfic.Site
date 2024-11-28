@@ -34,10 +34,6 @@ public class UpdateCommentBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Console.WriteLine("==============================================");
-            Console.WriteLine("       Фоновый сервис: Обновление комментариев");
-            Console.WriteLine("==============================================");
-            
             using var scope = _scopeFactory.CreateScope();
             var commentRepository = scope.ServiceProvider.GetRequiredService<ICommentRepository>();
             

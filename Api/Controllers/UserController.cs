@@ -5,7 +5,7 @@ using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Infrastructure.Controllers;
+namespace Api.Controllers;
 
 /// <summary>
 /// Контроллер User

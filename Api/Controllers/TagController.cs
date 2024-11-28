@@ -1,11 +1,12 @@
 using System.Security.Claims;
 using Application.Dto.TagDto;
+using Application.Dto.UserTagDto;
 using Application.Services;
 using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Infrastructure.Controllers;
+namespace Api.Controllers;
 
 /// <summary>
 /// Контроллер Tag
@@ -72,38 +73,34 @@ public class TagController : ControllerBase
         await _tagService.DeleteAsync(tagId, cancellationToken);
         return NoContent();
     }
-    
+
     /// <summary>
     /// Добавление Tag в избранное
     /// </summary>
-    /// <param name="tagId">Идентификатор Tag.</param>
+    /// <param name="userTagRequest">Данные UserTag.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     [Authorize]
-    [HttpPost("follow/{tagId:guid}")]
+    [HttpPost("follow")]
     public async Task<ActionResult> FollowTag(
-        [FromRoute] Guid tagId,
+        [FromForm] UserTagRequest userTagRequest,
         CancellationToken cancellationToken)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        await _tagService.FollowTagAsync(Guid.Parse(userIdClaim), tagId, cancellationToken);
+        await _tagService.FollowTagAsync(userTagRequest, cancellationToken);
         return NoContent();
     }
-    
+
     /// <summary>
     /// Удаление Tag из избранного
     /// </summary>
-    /// <param name="tagId">Идентификатор Tag.</param>
+    /// <param name="userTagRequest">Данные UserTag.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     [Authorize]
-    [HttpPost("unfollow/{tagId:guid}")]
+    [HttpPost("unfollow")]
     public async Task<ActionResult> UnfollowTag(
-        [FromRoute] Guid tagId,
+        [FromForm] UserTagRequest userTagRequest,
         CancellationToken cancellationToken)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        await _tagService.UnfollowTagAsync(Guid.Parse(userIdClaim), tagId, cancellationToken);
+        await _tagService.UnfollowTagAsync(userTagRequest, cancellationToken);
         return NoContent();
     }
     

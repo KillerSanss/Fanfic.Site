@@ -33,10 +33,6 @@ public class CreateWorkBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Console.WriteLine("=======================================");
-            Console.WriteLine("       Фоновый сервис: Добавление работ");
-            Console.WriteLine("=======================================");
-            
             var cacheWorksKey = "CACHED-WORKS-CREATE";
             var cacheWorkTagsKey = "CACHED-WORKTAGS-CREATE";
             

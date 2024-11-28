@@ -32,10 +32,6 @@ public class UpdateTagBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Console.WriteLine("=======================================");
-            Console.WriteLine("       Фоновый сервис: Обновление тэгов");
-            Console.WriteLine("=======================================");
-            
             var cacheKey = "CACHED-TAGS-UPDATE";
             var cachedTags = await _cache.GetStringAsync(cacheKey, token: stoppingToken);
 

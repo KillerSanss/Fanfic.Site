@@ -6,6 +6,13 @@ using Application.Interfaces;
 using Application.Mapping;
 using Application.Services;
 using Application.Settings;
+using Infrastructure.Background.ChapterBackground;
+using Infrastructure.Background.CommentBackground;
+using Infrastructure.Background.EmailBackgroundService;
+using Infrastructure.Background.TagBackground;
+using Infrastructure.Background.TagBackground.UserTagBackground;
+using Infrastructure.Background.WorkBackground;
+using Infrastructure.Background.WorkBackground.WorkLikeBackground;
 using Infrastructure.Dal.EntityFramework;
 using Infrastructure.Dal.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,11 +22,12 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        var enumConverter = new JsonStringEnumConverter(allowIntegerValues: false);
-        options.JsonSerializerOptions.Converters.Add(enumConverter);
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -56,6 +64,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        var enumConverter = new JsonStringEnumConverter(allowIntegerValues: false);
+        options.JsonSerializerOptions.Converters.Add(enumConverter);
+    });
+
 builder.Services.AddScoped<IWorkRepository, WorkRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
@@ -65,30 +80,44 @@ builder.Services.AddScoped<IWorkTagRepository, WorkTagRepository>();
 builder.Services.AddScoped<IWorkLikeRepository, WorkLikeRepository>();
 builder.Services.AddScoped<IUserTagRepository, UserTagRepository>();
 
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<TagService>();
-builder.Services.AddScoped<UserTagService>();
 builder.Services.AddScoped<WorkService>();
+builder.Services.AddScoped<TagService>();
+builder.Services.AddScoped<CommentService>();
+builder.Services.AddScoped<ChapterService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<WorkTagService>();
 builder.Services.AddScoped<WorkLikeService>();
-builder.Services.AddScoped<ChapterService>();
-builder.Services.AddScoped<CommentService>();
-
-builder.Services.AddScoped<BotService>();
-
+builder.Services.AddScoped<UserTagService>();
 builder.Services.AddScoped<AddToCache>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<EmailMessages>();
 builder.Services.AddScoped<BotMessage>();
 
-builder.Services.AddAutoMapper(typeof(UserMappingProfile));
-builder.Services.AddAutoMapper(typeof(TagMappingProfile));
 builder.Services.AddAutoMapper(typeof(WorkMappingProfile));
+builder.Services.AddAutoMapper(typeof(TagMappingProfile));
+builder.Services.AddAutoMapper(typeof(CommentMappingProfile));
+builder.Services.AddAutoMapper(typeof(ChapterMappingProfile));
+builder.Services.AddAutoMapper(typeof(UserMappingProfile));
 builder.Services.AddAutoMapper(typeof(WorkTagMappingProfile));
 builder.Services.AddAutoMapper(typeof(WorkLikeMappingProfile));
 builder.Services.AddAutoMapper(typeof(UserTagMappingProfile));
-builder.Services.AddAutoMapper(typeof(ChapterMappingProfile));
-builder.Services.AddAutoMapper(typeof(CommentMappingProfile));
+
+builder.Services.AddHostedService<CreateTagBackgroundService>();
+builder.Services.AddHostedService<UpdateTagBackgroundService>();
+builder.Services.AddHostedService<UserTagBackgroundService>();
+
+builder.Services.AddHostedService<CreateWorkBackgroundService>();
+builder.Services.AddHostedService<UpdateWorkBackgroundService>();
+builder.Services.AddHostedService<WorkLikeBackgroundService>();
+
+builder.Services.AddHostedService<CreateChapterBackgroundService>();
+builder.Services.AddHostedService<UpdateChapterBackgroundService>();
+
+builder.Services.AddHostedService<CreateCommentBackgroundService>();
+builder.Services.AddHostedService<UpdateCommentBackgroundService>();
+
+builder.Services.AddHostedService<SendEmailBackgroundService>();
+
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 builder.Services.AddAuthentication(x =>
@@ -118,11 +147,28 @@ builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpS
 builder.Services.Configure<GoogleSettings>(builder.Configuration.GetSection(nameof(GoogleSettings)));
 builder.Services.AddScoped<GoogleCloudService>();
 
-var connectionString = builder.Configuration.GetConnectionString("FanficSiteDatabase");
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetSection("Redis:Configuration").Value;
+    options.InstanceName = builder.Configuration.GetSection("Redis:InstanceName").Value;
+});
+
+var redisConfig = builder.Configuration.GetSection("Redis:Configuration").Value;
+Console.WriteLine($"Redis Configuration: {redisConfig}");
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5120);
+    serverOptions.ListenAnyIP(80);
+    serverOptions.ListenAnyIP(443);
+});
+
+var connectionString = builder.Configuration.GetConnectionString("FanficDatabase");
 Console.WriteLine(connectionString);
 
 builder.Services.AddDbContext<FanficSiteDbContext>(options =>
-        options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddCors(options =>
 {
@@ -135,27 +181,22 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
-
-        
-
-
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment())
 {
-    var botService = scope.ServiceProvider.GetRequiredService<BotService>();
-    botService.StartBot();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -168,13 +209,10 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/api/sample", () => "Hello, World!");
 
-if (app.Environment.IsDevelopment())
+app.Use(async (context, next) =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
+    context.Response.Headers.Append("Content-Security-Policy", "frame-ancestors 'self' https://oauth.telegram.org;");
+    await next();
+});
 
 app.Run();
-

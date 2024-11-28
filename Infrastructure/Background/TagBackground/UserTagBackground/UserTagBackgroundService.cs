@@ -33,10 +33,6 @@ public class UserTagBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         { 
-            Console.WriteLine("========================================================");
-            Console.WriteLine("       Фоновый сервис: Добавление/удаление любимых тэгов");
-            Console.WriteLine("========================================================");
-        
             var cacheUserTagsKey = "CACHED-USERTAGS-CREATE";
             var cacheUserTagsDeleteKey = "CACHED-USERTAGS-DELETE";
             
